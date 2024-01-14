@@ -1,0 +1,29 @@
+# Specify the folder to operate on: For Mac as example, to operate on files in Downloads/r24 folder, set folder variable on line 13 as 'Users/your_username/Downloads/r24'  
+
+# Specify string to insert: To insert '-', set insert_str variable on line 15 as '-'
+
+# Specify insert direction: 'front' for forward direction, 'back' for backward  
+
+# Specify number of characters to skip: If length is 2, set skip_length variable on line 17 to 1
+
+# If original filenames are '1234.png' and '5678.jpg', with insert_str = '-', insert_direction = 'front', final names will be '1-234.png' and '5-678.jpg'. If insert_direction is backward, final names will be '123-4.png' and '567-8.jpg'
+
+import os
+
+folder = 'Users/your_username/Downloads/r24'
+
+insert_str = '-'
+insert_direction = 'front' 
+skip_length = 1
+
+for filename in os.listdir(folder):
+    name, ext = os.path.splitext(filename)
+    
+    if insert_direction == 'back':
+        new_name = name[:-(skip_length)] + insert_str + name[-(skip_length):] 
+    elif insert_direction == 'front':
+        new_name = name[:skip_length] + insert_str + name[skip_length:]
+
+    new_filename = new_name + ext
+    
+    os.rename(os.path.join(folder, filename), os.path.join(folder, new_filename))

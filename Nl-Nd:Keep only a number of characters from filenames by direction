@@ -1,0 +1,26 @@
+# Specify folder path to operate on: For Mac as example, to operate on files in Downloads/r24 folder, set folder variable on line 11 to 'Users/your_username/Downloads/r24'
+
+# Specify number of characters to keep: To keep 2 characters, set keep_length variable on line 13 to 2
+
+# Specify keep direction: Set to 'front' for forward direction, 'back' for backward direction on line 14 with keep_direction variable  
+
+# If original filenames are '1234.png' and '5678.jpg', with keep_length = 2 and keep_direction = 'front', final names will be '12.png' and '56.jpg'. If keep_direction is set to backward, final names will be '34.png' and '78.jpg'
+
+import os
+
+folder = 'Users/your_username/Downloads/r24'
+
+keep_length = 2 
+keep_direction = 'front' 
+
+for filename in os.listdir(folder):
+    name, ext = os.path.splitext(filename)
+    
+    if keep_direction == 'front':
+        new_name = name[:keep_length] 
+    else:
+        new_name = name[-keep_length:]
+    
+    new_filename = new_name + ext
+    
+    os.rename(os.path.join(folder, filename), os.path.join(folder, new_filename))

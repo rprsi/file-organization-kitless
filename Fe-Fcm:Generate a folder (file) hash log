@@ -1,0 +1,47 @@
+# Specify the folder path to operate on: For Mac as an example, if you want to operate on the files in the r24 folder under Downloads, set the folder variable in line 16 to 'Users/your_username/Downloads/r24'
+
+# Use SHA1 algorithm by default. To change to MD5, SHA256, SHA512 etc, replace sha1 in line 29 with your desired algorithm name in lowercase
+
+# Default log file name format is original_filename+'_hash.log'. To modify the file name format or suffix, change '{folder}_hash.log' in line 18. For example, to change file name format to original_filename+'-shha.log', set it to: logging.basicConfig(filename=f'{folder}-shha.log', level=logging.INFO)
+
+# Default log format is INFO:root:hash_generation_time - original_file_path - file_hash_value. To change the format, modify line 38 (f'{time_now} - {folder} - {folder_hash}'). For example, to change log format to path: original_file_path hash: file_hash_value, set it to: logging.info(f'path: {folder} hash: {folder_hash}')
+
+# Default time format is year-month-day-hour-minute-second-millisecond-microsecond. To change it, modify the strftime format string in line 37 '%Y-%m-%d-%H-%M-%S-%f'. For example, to change time format to month-day-year hour:minute:second, set it to: time_now = datetime.datetime.now().strftime('%m-%d-%Y %H:%M:%S')
+
+import hashlib
+import os
+import logging
+import datetime
+
+folder = '/Users/your_username/Downloads/r24'
+
+logging.basicConfig(filename=f'{folder}_hash.log', level=logging.INFO)
+
+def hash_folder(folder):
+    files = []
+    for root, dirnames, filenames in os.walk(folder):
+        for filename in filenames:
+            path = os.path.join(root, filename)
+            files.append(path)
+
+    files.sort()
+    
+    hash_obj = hashlib.sha1() 
+    for file in files:
+        hash_obj.update(os.path.relpath(file, folder).encode('utf-8'))
+        with open(file, 'rb') as f:
+            hash_obj.update(f.read())
+
+    folder_hash = hash_obj.hexdigest()
+    
+    time_now = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%f') 
+    logging.info(f'{time_now} - {folder} - {folder_hash}')
+    
+    return folder_hash
+
+if __name__ == '__main__':
+
+    folder_hash = hash_folder(folder)
+    print(folder_hash)
+    
+    logging.shutdown()

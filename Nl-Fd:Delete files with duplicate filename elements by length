@@ -1,0 +1,27 @@
+# Specify folder to operate on: For Mac as example, to operate on files in Downloads/r24 folder, set folder variable on line 9 as 'Users/your_username/Downloads/r24'
+
+# Define length of duplicate element: If duplicate element is 3 characters, set duplicate_length variable on line 11 as 3
+
+# If folder contains files '0010.png', '1000.jpg', '0100.md', only file '0010.png' will be kept after operation
+
+import os
+
+folder = 'Users/your_username/Downloads/r24'
+
+duplicate_length = 3 
+
+filenames = os.listdir(folder)
+
+filtered = []
+elements = set() 
+
+for filename in filenames:
+    name = os.path.splitext(filename)[0]
+    element = name[:duplicate_length]
+    if element not in elements:
+        filtered.append(filename)
+        elements.add(element)
+
+for filename in filenames:
+    if filename not in filtered: 
+        os.remove(os.path.join(folder, filename))

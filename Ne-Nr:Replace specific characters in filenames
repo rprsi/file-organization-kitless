@@ -1,0 +1,26 @@
+# Specify folder to operate on: For Mac as example, to operate on files in Downloads/r24 folder, set folder variable in line 11 as 'Users/your_username/Downloads/r24'
+
+# Specify character to be replaced: To replace '_', set replace_this variable in line 13 as '_' 
+
+# Specify replacement character: To replace with '-', set replace_with variable in line 14 as '-'
+
+# Example filename '2021_10_01.jpeg' will become '2021-10-01.jpeg' after replacement
+
+import os
+
+folder = 'Users/your_username/Downloads/r24' 
+
+replace_this = '_'
+replace_with = '-'
+
+for filename in os.listdir(folder):
+
+    filepath = os.path.join(folder, filename)
+
+    if os.path.isfile(filepath):
+        if replace_this in filename:
+            new_name = filename.replace(replace_this, replace_with)
+            new_path = os.path.join(folder, new_name)
+            os.rename(filepath, new_path)
+
+print('Done')
